@@ -1,0 +1,38 @@
+@model Post
+
+<h1>DETAILS for @Model.PostId</h1>
+<h2>Upvoters</h2>
+<ul>
+@foreach(var vote in Model.VotesGiven
+    .Where(v => v.IsUpvote)
+    .GroupBy(v => v.UserId)
+    .Select(gr => gr.First()))
+{
+    <li>@vote.Voter.FirstName</li>
+}
+</ul>
+<h2>Downvoters</h2>
+<ul>
+@foreach(var vote in Model.VotesGiven
+    .Where(v => !v.IsUpvote)
+    .GroupBy(v => v.UserId)
+    .Select(gr => gr.First()))
+{
+    <li>@vote.Voter.FirstName</li>
+}
+</ul>
+<hr>
+<a href="/delete/@Model.PostId" class="btn btn-danger">Delete</a>
+<form action="/update/@Model.PostId" method="post">
+    <div class="form-group">
+        <span asp-validation-for="Topic"></span>
+        <label asp-for="Topic"></label>
+        <input asp-for="Topic">
+    </div>
+    <div class="form-group">
+        <span asp-validation-for="Content"></span>
+        <label asp-for="Content"></label>
+        <input asp-for="Content">
+    </div>
+    <button>Update</button>
+</form>

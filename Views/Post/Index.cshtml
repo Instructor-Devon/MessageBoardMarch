@@ -1,0 +1,44 @@
+﻿@model DashboardVM
+<h1>Message Board</h1>
+<h2>Add a Post:</h2>
+<form asp-action="Create" asp-controller="Post" method="post">
+    <div class="form-group">
+        <span asp-validation-for="NewPost.Topic"></span>
+        <label asp-for="NewPost.Topic"></label>
+        <input asp-for="NewPost.Topic">
+    </div>
+    <div class="form-group">
+        <span asp-validation-for="NewPost.Content"></span>
+        <label asp-for="NewPost.Content"></label>
+        <input asp-for="NewPost.Content">
+    </div>
+    <button>Submit</button>
+</form>
+<h2>Here's all the messages</h2>
+<hr>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Vote</th>
+            <th>User</th>
+            <th>Topic</th>
+            <th>Post</th>
+            <th>Date Added</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var post in Model.AllPosts)
+    {
+        <tr>
+            <td>
+                <a class="glyphicon glyphicon-arrow-up" href="/posts/vote/@post.PostId/@true"></a>
+                <a class="glyphicon glyphicon-arrow-down" href="/posts/vote/@post.PostId/@false"></a>
+            </td>
+            <td><a href="/@post.UserId">@post.Creator.FirstName</a></td>
+            <td>@post.Topic</td>
+            <td><a href="/posts/@post.PostId">@post.Content</a></td>
+            <td>@post.CreatedAt</td>
+        </tr>
+    }
+    </tbody>
+</table>
